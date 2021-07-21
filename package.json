@@ -1,0 +1,30 @@
+{
+  "name": "ntutimetable",
+  "version": "1.0.0",
+  "description": "1. Access Degree Audit via iNTU Student Link\r    - https://sso.wis.ntu.edu.sg/links/ugstudent.html\r 2. Click on view Course Timetable at the bottom of the page <br>\r ![View Course Timetable](/images/viewCourseTimetable.png)\r 3. Copy all the course information as shown below (no need to copy the title) <br>\r ![Courses](/images/courses.png)",
+  "main": "index.js",
+  "dependencies": {
+    "datebook": "^6.5.7"
+  },
+  "devDependencies": {
+    "css-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.3.2",
+    "style-loader": "^3.2.1",
+    "webpack": "^5.45.1",
+    "webpack-cli": "^4.7.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xJQx/NTU-Timetable-Generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xJQx/NTU-Timetable-Generator/issues"
+  },
+  "homepage": "https://github.com/xJQx/NTU-Timetable-Generator#readme"
+}
