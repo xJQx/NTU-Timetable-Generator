@@ -1,5 +1,7 @@
 # NTU Timetable Generator
 
+### Done using Datebook module to create ics file
+
 ### Steps:
 1. Access Degree Audit via iNTU Student Link
    - https://sso.wis.ntu.edu.sg/links/ugstudent.html
