@@ -13,30 +13,28 @@ generateButton.onclick = () => {
     let textareaData = textarea.value;
     
     // return ics styled data
-    let data = generateData(textareaData);
-
-    // create ics file for download
-    // filename = "schedule.ics";
-    // type = "application/calendar+xml"
-    // download(data, filename, type)
+    createICS(textareaData);
 }
 
 
 // return ics styled data
-function generateData(textareaData) {
+function createICS(textareaData) {
     // array of courses
     let courses = textareaData.split('\n');
 
     // 1st course
     let course = courses[0].split('\t');
 
-    // calculate date of lesson
+    // date of 1st lesson
     let date = startDateInput.value;
+    
+    // year and month of lesson
+    let year = parseInt(date.slice(0, 4));
+    let month = parseInt(date.slice(6, 8)) - 1;
+
     // change the day
     let day = parseInt(date.slice(8, 10));
     day += DAYS[course[11]];
-    day = ("0" + day).slice(-2);
-    let actualDate = date.slice(0, 8).concat(day);
 
     // get time duration
     let time = course[12].split('-');
@@ -48,15 +46,32 @@ function generateData(textareaData) {
         location: `${course[13]}`,
         // Class_Type [Group]
         description: `${course[9]} [${course[10]}]`,
-        start: new Date(`${actualDate}T${Math.floor(time[0] / 100)}:${time[0] % 100}:00`),
-        end: new Date(`${actualDate}T${Math.floor(time[1] / 100)}:${time[1] % 100}:00`),
-        recurrence: {
-            frequency: 'WEEKLY',
-            interval: 1,
-            count: 13
-        }
+        start: new Date(year, month, day, Math.floor(time[0] / 100), time[0] % 100),
+        end: new Date(year, month, day, Math.floor(time[1] / 100), time[1] % 100)
     })
-    console.log(icalendar.render());
+
+    for (let i = 0; i < 13; i++) {
+        // increment day by 7 days
+        day = parseInt(day) + 7;
+        
+        // skip recess week (week 8) (i == 6)
+        if (i == 6) {
+            continue;
+        }
+
+        const secondEvent = new ICalendar({
+            // Course: Title
+            title: `${course[0]}: ${course[1]}`,
+            // Venue
+            location: `${course[13]}`,
+            // Class_Type [Group]
+            description: `${course[9]} [${course[10]}]`,
+            start: new Date(year, month, day, Math.floor(time[0] / 100), time[0] % 100),
+            end: new Date(year, month, day, Math.floor(time[1] / 100), time[1] % 100)
+        })
+        icalendar.addEvent(secondEvent);
+    }
+
     icalendar.download();
 }
 
