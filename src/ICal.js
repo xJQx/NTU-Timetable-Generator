@@ -57,6 +57,7 @@ function createICS(textareaData) {
         }
     }
     icalendar.download();
+    init_Cal = false;
 }
 
 // add event
@@ -74,8 +75,8 @@ function newEvent(course) {
     
     else {
         // course title
-        TITLES['Course'] = course[0];
-        TITLES['Title'] = course[1];
+        courseTitle['Course'] = course[0];
+        courseTitle['Title'] = course[1];
 
         // change the day
         day += DAYS[course[11]];
@@ -111,7 +112,7 @@ function newEvent(course) {
         if (i == 7) {
             // increment day by 7 days
             day = parseInt(day) + 7;
-            
+
             continue;
         }
 
