@@ -12,24 +12,30 @@ let init_Cal = false;
 let icalendar;
 
 // date of monday of week 1
-let date;
-
 // year, month of lesson
-let year;
-let month;
+let date, year, month, day;
 
 // return ics styled data
 function createICS(textareaData) {
     // array of courses
     let courses = textareaData.split('\n');
 
-        // date of monday of week 1
-        date = startDateInput.value;
+    // date of monday of week 1
+    date = startDateInput.value;
 
-        // year, month of lesson
-        year = parseInt(date.slice(0, 4));
-        month = parseInt(date.slice(6, 8)) - 1;
+    // year, month of lesson
+    year = parseInt(date.slice(0, 4));
+    month = parseInt(date.slice(6, 8)) - 1;
 
+    // add event for each course
+    addCourse(courses);
+
+    icalendar.download();
+    init_Cal = false;
+}
+
+// for each course, add event
+function addCourse(courses) {
     course_loop:
     for (let i = 0; i < courses.length; i++) {
         let course = courses[i].split('\t');
@@ -56,30 +62,26 @@ function createICS(textareaData) {
             }
         }
     }
-    icalendar.download();
-    init_Cal = false;
 }
 
 // add event
 function newEvent(course) {
-    console.log(course);
+    // int array of teaching weeks
+    let teaching_weeks = teachingWeeks(course);
     
     // day
-    let day = parseInt(date.slice(8, 10));
+    day = parseInt(date.slice(8, 10));
 
-    // course with 2nd class type
-    if (secondClassType == true) {
-        // change the day
-        day += DAYS[course[2]];
-    }
+    changeDay(course, 0);
     
-    else {
-        // course title
-        courseTitle['Course'] = course[0];
-        courseTitle['Title'] = course[1];
-
-        // change the day
-        day += DAYS[course[11]];
+    // loop to add subsequent weeks
+    for (let i = 0; i < 14; i++) {
+        // check if this week is a teaching week
+        if (!teachingWeekCheck(teaching_weeks, i)) {
+            // increment day by 7 days if not teaching week
+            changeDay(course, 7);
+            continue;
+        }
 
         // initialise icalendar
         if (init_Cal == false) {
@@ -93,40 +95,24 @@ function newEvent(course) {
                 start: getDate(course, day, 'start'),
                 end: getDate(course, day, 'end')
             })
-        }
-    }
-    
-    // loop to add subsequent weeks
-    for (let i = 0; i < 14; i++) {
-        // skip 1 if the event is created when icalendar is initialised
-        if (init_Cal == false) {
+            icalendar.addProperty('CATEGORIES', 'CLASS');
+
             init_Cal = true;
-
-            // increment day by 7 days
-            day = parseInt(day) + 7;
-
-            continue;
         }
-        
-        // skip recess week (week 8) (i == 7)
-        if (i == 7) {
-            // increment day by 7 days
-            day = parseInt(day) + 7;
-
-            continue;
+        else {
+            const secondEvent = new ICalendar({
+                title: getTitle(course),
+                location: getLocation(course),
+                description: getDescription(course),
+                start: getDate(course, day, 'start'),
+                end: getDate(course, day, 'end')
+            })
+            secondEvent.addProperty('CATEGORIES', 'CLASS');
+            icalendar.addEvent(secondEvent);
         }
-
-        const secondEvent = new ICalendar({
-            title: getTitle(course),
-            location: getLocation(course),
-            description: getDescription(course),
-            start: getDate(course, day, 'start'),
-            end: getDate(course, day, 'end')
-        })
-        icalendar.addEvent(secondEvent);
 
         // increment day by 7 days
-        day = parseInt(day) + 7;
+        changeDay(course, 7);
     }
 }
 
@@ -174,6 +160,91 @@ function getDate(course, day, s_or_e) {
     else if (s_or_e == 'end') {
         return (new Date(year, month, day, Math.floor(time[1] / 100), time[1] % 100));
     }
+}
+
+// get day
+function changeDay(course, increment) {
+    // increment day by 7 days
+    if (increment == 7) {
+        day = parseInt(day) + 7;
+        return;
+    }
+
+    // course with 2nd class type
+    if (secondClassType == true) {
+        // change the day
+        day += DAYS[course[2]];
+    }
+    else {
+        // course title
+        courseTitle['Course'] = course[0];
+        courseTitle['Title'] = course[1];
+
+        // change the day
+        day += DAYS[course[11]];
+    }
+}
+
+// teaching week (return array of weeks in int)
+function teachingWeeks(course) {
+    // array to store all the teaching weeks
+    let weeks = [];
+
+    let remarks;
+    if (secondClassType == true) {
+        remarks = course[5];
+    }
+    else {
+        remarks = course[14];
+    }
+    remarks = remarks.replace('Teaching Wk', '');
+
+    // check if the sign used is - or ,
+    // remarks == '1-13' or '2,4,6,...,12'
+    if (remarks[1] == '-') {
+        remarks = remarks.split('-');
+
+        // remarks == ['1', '13']
+        for (let i = parseInt(remarks[0]); i <= parseInt(remarks[1]); i++) {
+            weeks.push(parseInt(i));
+        }
+    }
+    else if (remarks[1] == ',') {
+        remarks = remarks.split(',');
+        // remarks == ['2','4',...,'12']
+        for (let i = 0; i < remarks.length; i++) {
+            weeks.push(parseInt(remarks[i]));
+        }
+    }
+
+    return weeks;
+}
+
+// check if that week is a teaching week
+function teachingWeekCheck(teaching_weeks, week) {
+    // week++ because i starts from 0
+    week++;
+    if (week < 8) {
+        for (let j = 0; j < teaching_weeks.length; j++) {
+            if (teaching_weeks[j] == week) {
+                return true;
+            }
+        }
+    }
+    else if (week > 8) {
+        for (let k = 0; k < teaching_weeks.length; k++) {
+            // note that teaching_weeks[k] + 1 because week 8 is recess week
+            if (teaching_weeks[k] + 1 == week) {
+                return true;
+            }
+        }
+    }
+    // skip recess week (week 8)
+    else if (week == 8) {
+        return false;
+    }
+
+    return false;
 }
 
 export { createICS };
