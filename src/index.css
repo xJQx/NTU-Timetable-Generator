@@ -3,9 +3,15 @@ body {
     flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
+
+    margin: 20px;
+    background-color: rgb(240, 255, 255);
+    font-family: 'Courier New', monospace;
 }
-table, th, td {
-    border: solid 1px black;
-    border-collapse: collapse;
-    padding: 5px;
+
+input[type='date'] {
+    border: 1px, solid, whitesmoke;
+}
+input[type='date']:focus {
+    border-color: rgba(174, 211, 245, 0.2);
 }
