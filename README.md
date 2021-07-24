@@ -13,6 +13,4 @@
    - Teaching Weeks can viewed here: https://www.ntu.edu.sg/admissions/matriculation/academic-calendars
 5. Click on 'Generate Timetable'
 
-##### Credit:
-##### Done using Datebook module to create ics file:
-- https://datebook.dev/
+##### Credit: Done using Datebook module (https://datebook.dev/) to create ics file
