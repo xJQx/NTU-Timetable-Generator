@@ -9,6 +9,31 @@ const textarea = document.querySelector('#textarea');
 generateButton.onclick = () => {
     let textareaData = textarea.value;
     
+    // error checking
+    if (!checkDateInput()) {;}
+
     // return ics styled data
-    createICS(textareaData);
+    else if (!createICS(textareaData)) {
+        alert('Course Info Pasted is not appropriate!');
+    }
+}
+
+// check date input
+function checkDateInput() {
+    // if no input
+    if (startDateInput.value == "") {
+        alert('Please Input a Date!');
+        return false;
+    }
+
+    // check if it is a monday
+    else 
+    {
+        let day_type = new Date(startDateInput.value);
+        if (day_type.getDay() != 1) {
+            alert('Date must be a Monday!');
+            return false;
+        }
+    }
+    return true;
 }
