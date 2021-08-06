@@ -221,6 +221,10 @@ function teachingWeeks() {
             weeks.push(parseInt(remarks[i]));
         }
     }
+    // for a single week
+    else if (remarks.length == 1) {
+        weeks.push(parseInt(remarks[0]));
+    }
     return weeks;
 }
 
