@@ -1,5 +1,5 @@
-# NTU Timetable Generator
-## https://xjqx.github.io/NTU-Timetable-Generator/
+## NTU Timetable Generator
+### Live Website: https://xjqx.github.io/NTU-Timetable-Generator/
 ### Steps:
 1. Access **Degree Audit** via iNTU Student Link
    - https://sso.wis.ntu.edu.sg/links/ugstudent.html
