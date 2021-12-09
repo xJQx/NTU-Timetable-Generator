@@ -1,6 +1,19 @@
-## NTU Timetable Generator
-### Live Website: https://xjqx.github.io/NTU-Timetable-Generator/
-### Steps:
+# NTU Timetable Generator
+
+<b>Download your NTU Timetable as ics file for importing into calender!</b>
+
+![JavaScript](https://img.shields.io/badge/-JavaScript-%23F7DF1C?style=flat-square&logo=javascript&logoColor=000000&labelColor=%23F7DF1C&color=%23FFCE5A)
+![HTML5](https://img.shields.io/badge/-HTML5-%23E44D27?style=flat-square&logo=html5&logoColor=ffffff)
+![CSS3](https://img.shields.io/badge/-CSS3-%231572B6?style=flat-square&logo=css3)
+
+
+## <a href="https://xjqx.github.io/NTU-Timetable-Generator">Website</a>
+
+<img src="ntu-timetable-generator-demo.png" alt="ntu-timetable-generator-demo.png" width=500 />
+
+<br>
+
+## Steps:
 1. Access **Degree Audit** via iNTU Student Link
    - https://sso.wis.ntu.edu.sg/links/ugstudent.html
 2. Click on **view Course Timetable** at the bottom of the page <br>
@@ -11,4 +24,4 @@
    - Teaching Weeks can viewed here: https://www.ntu.edu.sg/admissions/matriculation/academic-calendars
 5. Click on **'Generate Timetable'**
 
-##### Credit: Done using Datebook module (https://datebook.dev/) to create ics file
+##### `Credit: Done using Datebook module (https://datebook.dev/) to create ics file`
