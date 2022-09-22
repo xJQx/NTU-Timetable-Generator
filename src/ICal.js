@@ -41,7 +41,11 @@ function createICS(textareaData) {
     clearCourseInfo();
 
     try {
-        icalendar.download();
+        let file_name = `ntu_${year}_`;
+        if (7 <= month <= 9) file_name += 'sem_1.ics';
+        else file_name += 'sem_2.ics';
+
+        icalendar.download(file_name);
     }
     catch(err) {
         return false;
