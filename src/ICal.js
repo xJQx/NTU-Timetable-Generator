@@ -17,6 +17,16 @@ function createICS(textareaData) {
     // array of courses
     let courses = textareaData.split('\n');
 
+    // check if venue is split into 2 lines e.g. (S4-CL1 & [Communication Lab 1]), if yes combine them
+    let n = courses.length-1;
+    for (let i = 0; i < n; i++) {
+        if (isVenueInTwoLines(courses[i+1])) {
+            // combine line 1 and line 2
+            courses[i] += ' ' + courses[i+1]; // length of courses[i] became 16 now
+            i++;
+        }
+    }
+
     // date of monday of week 1
     date = document.querySelector('#start-date').value;
 
@@ -45,6 +55,8 @@ function addCourse(courses) {
     course_loop:
     for (let i = 0; i < courses.length; i++) {
         let course = courses[i].split('\t');
+
+        if (course.length == 2) continue course_loop; // to skip the 2nd line venue if the venue has been split into 2 lines
 
         // remove HEADINGS if it is included
         for (let j = 0; j < HEADINGS.length; j++) {
@@ -153,6 +165,12 @@ function getTitle() {
 }
 
 // Venue
+function isVenueInTwoLines(line2) {
+    let firstText = line2.split('\t')[0];
+
+    if (firstText[0] === '[' && firstText[firstText.length-1] === ']') return true;
+    else return false;
+}
 function getLocation() {
     return `${courseInfo['Venue']}`;
 }
